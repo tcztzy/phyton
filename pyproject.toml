@@ -47,6 +47,7 @@ packages = ["phyton"]
 legacy_tox_ini = """
 [tox]
 envlist = py{py37,37,38,39}
+isolated_build = True
 [testenv]
 deps =
     pytest

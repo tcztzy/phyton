@@ -1,2 +1,9 @@
+.coverage
+.idea/
 .python-version
+.tox/
 .vscode/
+*.whl
+*.egg-info
+__pycache__/
+htmlcov/
