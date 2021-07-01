@@ -1,16 +1,32 @@
 import datetime
 import unittest
 
+from phyton.core.abc import AtmoABC, PlantABC, SoilABC
 from phyton.core.simulation import Simulation, date_index, timedelta_step
 
 one_day = datetime.timedelta(days=1)
+
+
+class Soil(SoilABC):
+    def evaluate(self):
+        ...
+
+
+class Atmo(AtmoABC):
+    def evaluate(self):
+        ...
+
+
+class Plant(PlantABC):
+    def evaluate(self):
+        ...
 
 
 class CoreTestCase(unittest.TestCase):
     def test_simulation(self):
         today = datetime.date.today()
         tomorrow = today + one_day
-        sim = Simulation(today, tomorrow)
+        sim = Simulation(today, tomorrow, Soil(), Atmo(), Plant())
         self.assertEqual(sim.start_date, today)
         self.assertEqual(sim.stop_date, tomorrow)
         self.assertIsNotNone(sim[today])
@@ -28,7 +44,7 @@ class CoreTestCase(unittest.TestCase):
         with self.assertRaises(IndexError):
             _state = sim[today - one_day]
         with self.assertRaises(ValueError):
-            _sim = Simulation(tomorrow, today)
+            _sim = Simulation(tomorrow, today, Soil(), Atmo(), Plant())
 
     def test_date_index(self):
         with self.assertRaises(TypeError):

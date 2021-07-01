@@ -7,16 +7,24 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Any, Optional, Union
 
+from .abc import AtmoABC, PlantABC, SoilABC
+
 
 @dataclass
 class DailyState:
     """Daily state for phyton"""
 
     date: datetime.date
+    soil: SoilABC
+    atmo: AtmoABC
+    plant: PlantABC
     evaluated: bool = False
 
     def evaluate(self):
         """Evaluate the daily state"""
+        self.soil.evaluate()
+        self.atmo.evaluate()
+        self.plant.evaluate()
         self.evaluated = True
 
 
@@ -51,12 +59,17 @@ class Simulation:
 
     start_date: datetime.date
     stop_date: datetime.date
+    soil: SoilABC
+    atmo: AtmoABC
+    plant: PlantABC
     states: list[DailyState] = field(default_factory=list)
 
     def __post_init__(self):
         if self.stop_date < self.start_date:
             raise ValueError
-        self.states.append(DailyState(self.start_date))
+        self.states.append(
+            DailyState(self.start_date, self.soil, self.atmo, self.plant)
+        )
 
     def run(self):
         """Run the simulation"""

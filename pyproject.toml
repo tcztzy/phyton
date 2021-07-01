@@ -33,6 +33,7 @@ branch = true
 
 [tool.coverage.report]
 fail_under = 100
+exclude_lines = ["pragma: no cover", "abstract"]
 
 [tool.isort]
 profile = "black"
